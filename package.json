@@ -30,6 +30,7 @@
     },
     "win": {
       "target": "portable",
+      "icon": "build/icons/icon.png",
       "artifactName": "vtally-${version}-${os}-${arch}-portable.${ext}"
     }
   },
