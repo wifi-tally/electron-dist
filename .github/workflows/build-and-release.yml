@@ -73,7 +73,8 @@ jobs:
           pip install -r scripts/requirements.txt
           npm config set python "$(which python3)"
 
-          npm ci
+          # no optional prevents installation of fsevents (which does not work on win)
+          npm ci --no-optional
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build
