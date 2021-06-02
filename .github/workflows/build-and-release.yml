@@ -1,6 +1,6 @@
 # publishes a release to nmpjs.com
 
-name: publish
+name: build-and-release.yml
 on:
   workflow_dispatch: ~
 #    inputs:
@@ -16,9 +16,13 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  publish:
+  linux:
     runs-on: "ubuntu-latest"
     steps:
+      - name: Checkout the source code
+        uses: actions/checkout@v2
+        with:
+          ref: main
       - name: Use node.js ${{ env.NODEJS_VERSION }}
         uses: actions/setup-node@v1
         with:
