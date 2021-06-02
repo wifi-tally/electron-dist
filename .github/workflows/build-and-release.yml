@@ -1,0 +1,32 @@
+# publishes a release to nmpjs.com
+
+name: publish
+on:
+  workflow_dispatch: ~
+#    inputs:
+#      source:
+#        description: 'Source *.tgz (from S3 or releases)'
+#        required: true
+#      version:
+#        description: 'Version'
+#        required: false
+#        default: ''
+env:
+  NODEJS_VERSION: 14
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  publish:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Use node.js ${{ env.NODEJS_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+      - run: |
+          npm ci
+          ./node_modules/.bin/electron-rebuild
+
+          npm run dist
+
+          ls -la dist/

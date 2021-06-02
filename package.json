@@ -1,0 +1,33 @@
+{
+  "name": "wifi-tally-electron",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vtally": "0.5.0-alpha2"
+  },
+  "postinstall": "electron-builder install-app-deps",
+  "devDependencies": {
+    "electron": "^13.0.1",
+    "electron-builder": "^22.10.5",
+    "electron-rebuild": "^2.3.5"
+  },
+  "build": {
+    "appId": "org.vtally.hub",
+    "artifactName": "vtally-${version}-${os}-${arch}.${ext}",
+    "productName": "vTally Hub",
+    "linux": {
+      "target": "appImage",
+      "executableName": "vtally",
+      "category": "AudioVideo"
+    }
+  }
+}
