@@ -76,7 +76,7 @@ jobs:
           # no optional prevents installation of fsevents (which does not work on win)
           npm ci --no-optional
       - name: Update package.json
-        run: ./scripts/update-package.py
+        run: python3 ./scripts/update-package.py
       - name: Build
         run: |
           ./node_modules/.bin/electron-rebuild
@@ -90,4 +90,4 @@ jobs:
           aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
       - name: Push artifacts to AWS S3
         run: |
-          ./scripts/upload-s3.py
+          python ./scripts/upload-s3.py

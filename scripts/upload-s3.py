@@ -32,7 +32,6 @@ for file in os.listdir(basedir / "dist"):
         logging.info(f'Uploading {file}...')
         if not upload_file(path):
             logging.error(f'Could not upload {path} to S3.')
-            print()
         else:
             found = True
             print(f'::warning ::Artifact is available at {AWS_S3_NIGHTLY_BASEURI}/{file} for the next days.')
