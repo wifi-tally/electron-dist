@@ -14,6 +14,9 @@ on:
 env:
   NODEJS_VERSION: 14
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  AWS_S3_NIGHTLY_BASEURI: https://wifi-tally-nightly.s3.eu-central-1.amazonaws.com
+  AWS_S3_NIGHTLY_BUCKET: wifi-tally-nightly
+  AWS_S3_NIGHTLY_REGION: eu-central-1
 
 jobs:
   linux:
@@ -30,12 +33,26 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
+          # needed for https://www.npmjs.com/package/midi
           sudo apt-get install -y libasound2-dev
+
+          pip install -r scripts/requirements.txt
+
+          npm ci
+
+      - name: Update package.json
+        run: ./scripts/update-package.py
       - name: Build
         run: |
-          npm ci
           ./node_modules/.bin/electron-rebuild
 
           npm run dist
-
-          ls -la dist/
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_S3_NIGHTLY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_NIGHTLY_KEY }}
+          aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
+      - name: Push artifacts to AWS S3
+        run: |
+          ./scripts/upload-s3.py

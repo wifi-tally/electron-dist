@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import logging
+import boto3
+from botocore.exceptions import ClientError
+
+basedir = os.path.dirname(os.path.dirname(__file__))
+AWS_S3_NIGHTLY_BUCKET = os.getenv("AWS_S3_NIGHTLY_BUCKET")
+AWS_S3_NIGHTLY_BASEURI = os.getenv("AWS_S3_NIGHTLY_BASEURI")
+
+def upload_file(file):
+    object_name = os.path.basename(file)
+
+    # Upload the file
+    s3_client = boto3.client('s3')
+    try:
+        response = s3_client.upload_file(file, AWS_S3_NIGHTLY_BUCKET, object_name, ExtraArgs={'ACL': 'public-read'})
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
+
+found = False
+
+for file in os.listdir(f'{basedir}/dist'):
+    if file.startswith("vtally-"):
+        path = os.path.join(basedir, "dist", file)
+        logging.info(f'Uploading {file}...')
+        if not upload_file(path):
+            logging.error(f'Could not upload {path} to S3.')
+            print()
+        else:
+            found = True
+            print(f'::warning ::Artifact is available at {AWS_S3_NIGHTLY_BASEURI}/{file} for the next days.')
+
+if not found: 
+    logging.error("No file found to upload.")
+    sys.exit(-1)
