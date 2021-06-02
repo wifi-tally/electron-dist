@@ -28,7 +28,7 @@
       "executableName": "vtally",
       "category": "AudioVideo"
     },
-    "windows": {
+    "win": {
       "target": "portable",
       "artifactName": "vtally-${version}-${os}-${arch}-portable.${ext}"
     }

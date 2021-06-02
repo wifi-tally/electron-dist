@@ -36,6 +36,7 @@ jobs:
 #          # needed for https://www.npmjs.com/package/midi
 #          sudo apt-get install -y libasound2-dev
 
+      #     npm config set python "$(which python3)"
       #     pip install -r scripts/requirements.txt
 
       #     npm ci
@@ -70,6 +71,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r scripts/requirements.txt
+          npm config set python "$(which python3)"
 
           npm ci
       - name: Update package.json
