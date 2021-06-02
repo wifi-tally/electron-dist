@@ -19,8 +19,45 @@ env:
   AWS_S3_NIGHTLY_REGION: eu-central-1
 
 jobs:
-  linux:
-    runs-on: "ubuntu-latest"
+#  linux:
+#    runs-on: "ubuntu-latest"
+#    steps:
+#      - name: Checkout the source code
+#        uses: actions/checkout@v2
+#        with:
+#          ref: main
+#      - name: Use node.js ${{ env.NODEJS_VERSION }}
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ env.NODEJS_VERSION }}
+#      - name: Install dependencies
+#        run: |
+#          sudo apt-get update
+#          # needed for https://www.npmjs.com/package/midi
+#          sudo apt-get install -y libasound2-dev
+
+      #     pip install -r scripts/requirements.txt
+
+      #     npm ci
+
+      # - name: Update package.json
+      #   run: ./scripts/update-package.py
+      # - name: Build
+      #   run: |
+      #     ./node_modules/.bin/electron-rebuild
+
+      #     npm run dist
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_S3_NIGHTLY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_S3_NIGHTLY_KEY }}
+      #     aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
+      # - name: Push artifacts to AWS S3
+      #   run: |
+      #     ./scripts/upload-s3.py
+  windows:
+    runs-on: "windows-latest"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
@@ -32,14 +69,9 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          # needed for https://www.npmjs.com/package/midi
-          sudo apt-get install -y libasound2-dev
-
           pip install -r scripts/requirements.txt
 
           npm ci
-
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build

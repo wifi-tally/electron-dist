@@ -27,6 +27,10 @@
       "target": "appImage",
       "executableName": "vtally",
       "category": "AudioVideo"
+    },
+    "windows": {
+      "target": "portable",
+      "artifactName": "vtally-${version}-${os}-${arch}-portable.${ext}"
     }
   },
   "homepage": "https://wifi-tally.github.io/",
