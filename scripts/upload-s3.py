@@ -3,14 +3,16 @@
 import os
 import sys
 import logging
+import pathlib
 import boto3
 from botocore.exceptions import ClientError
 
-basedir = os.path.dirname(os.path.dirname(__file__))
+basedir = pathlib.Path(os.path.dirname(os.path.dirname(__file__)))
 AWS_S3_NIGHTLY_BUCKET = os.getenv("AWS_S3_NIGHTLY_BUCKET")
 AWS_S3_NIGHTLY_BASEURI = os.getenv("AWS_S3_NIGHTLY_BASEURI")
 
 def upload_file(file):
+    file = f'{file}'
     object_name = os.path.basename(file)
 
     # Upload the file
@@ -24,9 +26,9 @@ def upload_file(file):
 
 found = False
 
-for file in os.listdir(f'{basedir}/dist'):
+for file in os.listdir(basedir / "dist"):
     if file.startswith("vtally-"):
-        path = os.path.join(basedir, "dist", file)
+        path = basedir / "dist" / file
         logging.info(f'Uploading {file}...')
         if not upload_file(path):
             logging.error(f'Could not upload {path} to S3.')
