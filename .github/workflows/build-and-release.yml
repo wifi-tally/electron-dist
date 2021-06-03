@@ -81,7 +81,7 @@ jobs:
   #         # needed for https://www.npmjs.com/package/midi
   #         sudo apt-get install -y libasound2-dev
  
-  #         pip install -r scripts/requirements.txt
+  #         pip3 install -r scripts/requirements.txt
  
   #         yarn install
  
@@ -114,7 +114,7 @@ jobs:
   #         node-version: ${{ env.NODEJS_VERSION }}
   #     - name: Install dependencies
   #       run: |
-  #         pip install -r scripts/requirements.txt
+  #         pip3 install -r scripts/requirements.txt
 
   #         # no optional prevents installation of fsevents (which does not work on win)
   #         yarn install
@@ -147,7 +147,7 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
       - name: Install dependencies
         run: |
-          pip install -r scripts/requirements.txt
+          pip3 install -r scripts/requirements.txt
  
           yarn install
       - name: Update package.json
