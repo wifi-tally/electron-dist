@@ -17,8 +17,51 @@ env:
   AWS_S3_NIGHTLY_REGION: eu-central-1
 
 jobs:
-  linux-x64:
+  # linux-x64:
+  #   runs-on: "ubuntu-latest"
+  #   steps:
+  #     - name: Checkout the source code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: main
+  #     - name: Use node.js ${{ env.NODEJS_VERSION }}
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: ${{ env.NODEJS_VERSION }}
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         # needed for https://www.npmjs.com/package/midi
+  #         sudo apt-get install -y libasound2-dev
+ 
+  #         pip install -r scripts/requirements.txt
+ 
+  #         yarn install
+ 
+  #     - name: Update package.json
+  #       run: ./scripts/update-package.py
+  #     - name: Build
+  #       run: |
+  #         ./node_modules/.bin/electron-rebuild
+  #         yarn dist
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_S3_NIGHTLY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_S3_NIGHTLY_KEY }}
+  #         aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
+  #     - name: Push artifacts to AWS S3
+  #       run: |
+  #         ./scripts/upload-s3.py
+  linux-armv7:
     runs-on: "ubuntu-latest"
+    env: 
+      # force compilation for arm
+      # @see https://github.com/nodejs/node-gyp/issues/829#issuecomment-665527032
+      CC: arm-linux-gnueabihf-gcc
+      CXX: arm-linux-gnueabihf-g++
+      CC_host: "gcc -m32"
+      CXX_host: "g++ -m32"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
@@ -41,8 +84,10 @@ jobs:
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build
+        env: 
         run: |
-          ./node_modules/.bin/electron-rebuild
+          # "force" to prevent using of pre-gyp
+          ./node_modules/.bin/electron-rebuild --force
           yarn dist
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -53,36 +98,36 @@ jobs:
       - name: Push artifacts to AWS S3
         run: |
           ./scripts/upload-s3.py
-  windows:
-    runs-on: "windows-latest"
-    steps:
-      - name: Checkout the source code
-        uses: actions/checkout@v2
-        with:
-          ref: main
-      - name: Use node.js ${{ env.NODEJS_VERSION }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-      - name: Install dependencies
-        run: |
-          pip install -r scripts/requirements.txt
+  # windows:
+  #   runs-on: "windows-latest"
+  #   steps:
+  #     - name: Checkout the source code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: main
+  #     - name: Use node.js ${{ env.NODEJS_VERSION }}
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: ${{ env.NODEJS_VERSION }}
+  #     - name: Install dependencies
+  #       run: |
+  #         pip install -r scripts/requirements.txt
 
-          # no optional prevents installation of fsevents (which does not work on win)
-          yarn install
-      - name: Update package.json
-        run: python3 ./scripts/update-package.py
-      - name: Build
-        run: |
-          ./node_modules/.bin/electron-rebuild
+  #         # no optional prevents installation of fsevents (which does not work on win)
+  #         yarn install
+  #     - name: Update package.json
+  #       run: python3 ./scripts/update-package.py
+  #     - name: Build
+  #       run: |
+  #         ./node_modules/.bin/electron-rebuild
 
-          yarn dist
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_S3_NIGHTLY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_S3_NIGHTLY_KEY }}
-          aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
-      - name: Push artifacts to AWS S3
-        run: |
-          python ./scripts/upload-s3.py
+  #         yarn dist
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_S3_NIGHTLY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_S3_NIGHTLY_KEY }}
+  #         aws-region: ${{ env.AWS_S3_NIGHTLY_REGION }}
+  #     - name: Push artifacts to AWS S3
+  #       run: |
+  #         python ./scripts/upload-s3.py
