@@ -60,8 +60,8 @@ jobs:
       # @see https://github.com/nodejs/node-gyp/issues/829#issuecomment-665527032
       CC: arm-linux-gnueabihf-gcc
       CXX: arm-linux-gnueabihf-g++
-      #CC_host: "gcc -m32"
-      #CXX_host: "g++ -m32"
+      CC_host: "gcc -march=armv7"
+      CXX_host: "g++ -march=armv7"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
