@@ -84,7 +84,6 @@ jobs:
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build
-        env: 
         run: |
           # "force" to prevent using of pre-gyp
           ./node_modules/.bin/electron-rebuild --force
