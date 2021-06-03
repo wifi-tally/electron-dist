@@ -76,7 +76,7 @@ jobs:
           sudo apt-get update
 
           # tools for arm cross compilation
-          sudo apt-get install -y arm-linux-gnueabihf-g++ arm-linux-gnueabihf-gcc
+          sudo apt-get install -y g++-arm-linux-gnueabihf gcc-arm-linux-gnueabihf
 
           # needed for https://www.npmjs.com/package/midi
           sudo apt-get install -y libasound2-dev
