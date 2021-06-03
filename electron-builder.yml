@@ -1,0 +1,12 @@
+
+appId: org.vtally.hub
+artifactName: vtally-${version}-${os}-${arch}.${ext}
+productName: vTally Hub
+linux: 
+  target: appImage
+  executableName: vtally
+  category: AudioVideo
+win: 
+  target: portable
+  icon: build/icons/icon.png
+  artifactName: vtally-${version}-${os}-${arch}-portable.${ext}
