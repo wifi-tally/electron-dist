@@ -6,8 +6,8 @@ we use Electron to create a file that is installable with a few clicks.
 ## Development
 
 ````bash
-npm ci
+yarn install
 ./node_modules/.bin/electron-rebuild
 
-npm start
+yarn start
 ````

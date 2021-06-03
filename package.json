@@ -11,6 +11,7 @@
   "repository": "github:wifi-tally/electron-dist",
   "license": "MIT",
   "dependencies": {
+    "open": "^8.2.0",
     "vtally": "0.5.0-alpha2"
   },
   "postinstall": "electron-builder install-app-deps",
