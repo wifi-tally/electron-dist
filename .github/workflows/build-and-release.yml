@@ -17,33 +17,32 @@ env:
   AWS_S3_NIGHTLY_REGION: eu-central-1
 
 jobs:
- linux-x64:
-   runs-on: "ubuntu-latest"
-   steps:
-     - name: Checkout the source code
-       uses: actions/checkout@v2
-       with:
-         ref: main
-     - name: Use node.js ${{ env.NODEJS_VERSION }}
-       uses: actions/setup-node@v1
-       with:
-         node-version: ${{ env.NODEJS_VERSION }}
-     - name: Install dependencies
-       run: |
-         sudo apt-get update
-         # needed for https://www.npmjs.com/package/midi
-         sudo apt-get install -y libasound2-dev
-
+  linux-x64:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout the source code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Use node.js ${{ env.NODEJS_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          # needed for https://www.npmjs.com/package/midi
+          sudo apt-get install -y libasound2-dev
+ 
           pip install -r scripts/requirements.txt
-
+ 
           yarn install
-
+ 
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build
         run: |
           ./node_modules/.bin/electron-rebuild
-
           yarn dist
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
