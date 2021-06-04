@@ -1,14 +1,11 @@
 name: build-and-release.yml
 on:
   workflow_dispatch: ~
-#    inputs:
-#      source:
-#        description: 'Source *.tgz (from S3 or releases)'
-#        required: true
-#      version:
-#        description: 'Version'
-#        required: false
-#        default: ''
+    inputs:
+      version:
+        description: 'Version. A version that is present in the S3 bucket. (like 0.5.0-alpha1'
+        required: true
+        default: ''
 env:
   NODEJS_VERSION: 14
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -19,6 +16,9 @@ env:
 jobs:
   linux-x64:
     runs-on: "ubuntu-latest"
+    env:
+      TALLY_VERSION: "${{ github.event.inputs.version }}"
+      TALLY_SOURCE: "https://wifi-tally-nightly.s3.eu-central-1.amazonaws.com/vtally-${{ github.event.inputs.version }}/vtally-${{ github.event.inputs.version }}.tgz"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
@@ -35,9 +35,10 @@ jobs:
           sudo apt-get install -y libasound2-dev
  
           pip install -r scripts/requirements.txt
+
+          ./scripts/set-version.py
  
           yarn install
- 
       - name: Update package.json
         run: ./scripts/update-package.py
       - name: Build
@@ -103,6 +104,9 @@ jobs:
   #         ./scripts/upload-s3.py
   windows:
     runs-on: "windows-latest"
+    env:
+      TALLY_VERSION: "${{ github.event.inputs.version }}"
+      TALLY_SOURCE: "https://wifi-tally-nightly.s3.eu-central-1.amazonaws.com/vtally-${{ github.event.inputs.version }}/vtally-${{ github.event.inputs.version }}.tgz"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
@@ -112,11 +116,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODEJS_VERSION }}
+          
       - name: Install dependencies
         run: |
           pip3 install -r scripts/requirements.txt
 
-          # no optional prevents installation of fsevents (which does not work on win)
+          python3 ./scripts/set-version.py
+
           yarn install
       - name: Update package.json
         run: python3 ./scripts/update-package.py
@@ -136,6 +142,9 @@ jobs:
           python ./scripts/upload-s3.py
   macosx-x64:
     runs-on: "macos-latest"
+    env:
+      TALLY_VERSION: "${{ github.event.inputs.version }}"
+      TALLY_SOURCE: "https://wifi-tally-nightly.s3.eu-central-1.amazonaws.com/vtally-${{ github.event.inputs.version }}/vtally-${{ github.event.inputs.version }}.tgz"
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v2
@@ -148,6 +157,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip3 install -r scripts/requirements.txt
+
+          ./scripts/set-version.py
  
           yarn install
       - name: Update package.json
