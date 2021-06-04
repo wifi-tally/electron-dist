@@ -13,7 +13,7 @@ AWS_S3_NIGHTLY_BASEURI = os.getenv("AWS_S3_NIGHTLY_BASEURI")
 
 def upload_file(file):
     file = f'{file}'
-    object_name = f'{os.getenv("TALLY_VERSION")}/{os.path.basename(file)}'
+    object_name = f'vtally-{os.getenv("TALLY_VERSION")}/{os.path.basename(file)}'
 
     # Upload the file
     s3_client = boto3.client('s3')
