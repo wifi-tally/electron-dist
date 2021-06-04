@@ -1,6 +1,6 @@
 name: build-and-release.yml
 on:
-  workflow_dispatch: ~
+  workflow_dispatch:
     inputs:
       version:
         description: 'Version. A version that is present in the S3 bucket. (like 0.5.0-alpha1'
