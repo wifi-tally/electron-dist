@@ -1,8 +1,10 @@
 const package = require('vtally/package.json')
-const { app, Tray, Menu, dialog } = require('electron')
+const { app, Tray, Menu, dialog, nativeImage } = require('electron')
 const open = require("open")
+const path = require("path")
 
 const httpPort = (typeof process.env.PORT === "string" && parseInt(process.env.PORT, 10)) || 3000
+const assetsPath = app.isPackaged ? path.join(process.resourcesPath, "assets") : "assets";
 
 const openBrowser = () => {
     open(`http://localhost:${httpPort}`)
@@ -24,7 +26,9 @@ const exitApp = () => {
 
 let tray = null
 app.whenReady().then(() => {
-    tray = new Tray('build/icons/icon.ico')
+    const icon = nativeImage.createFromPath(path.join(assetsPath, "icon.ico"))
+    tray = new Tray(icon)
+    
     const contextMenu = Menu.buildFromTemplate([
         { label: `Tally Hub ${package.version}`, enabled: false },
         { 
@@ -40,5 +44,4 @@ app.whenReady().then(() => {
     ])
     tray.setToolTip('vTally Hub')
     tray.setContextMenu(contextMenu)
-    tray.on('double-click', openBrowser)
 })

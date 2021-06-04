@@ -14,3 +14,5 @@ mac:
   target: dmg
   category: public.app-category.video
   icon: build/icons/icon.png
+extraResources:
+  - "./assets/**"
