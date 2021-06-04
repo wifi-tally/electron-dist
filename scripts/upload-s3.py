@@ -19,7 +19,7 @@ def upload_file(file):
     s3_client = boto3.client('s3')
     try:
         response = s3_client.upload_file(file, AWS_S3_NIGHTLY_BUCKET, object_name, ExtraArgs={'ACL': 'public-read'})
-        print(f'::warning ::Artifact is available at {AWS_S3_NIGHTLY_BASEURI}/{file} for the next days.')
+        print(f'::warning ::Artifact is available at {AWS_S3_NIGHTLY_BASEURI}/{object_name} for the next days.')
     except ClientError as e:
         logging.error(e)
         return False
