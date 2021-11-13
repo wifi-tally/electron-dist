@@ -1,3 +1,7 @@
+// override logging
+// @see https://github.com/megahertz/electron-log#overriding-consolelog
+Object.assign(console, require('electron-log').functions);
+
 console.log("Using Electron Runner for vTally");
 console.log("================================");
 console.log("");

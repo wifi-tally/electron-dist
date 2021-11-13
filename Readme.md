@@ -11,3 +11,9 @@ yarn install
 
 yarn start
 ````
+
+# Logs
+
+* **on Linux**: ~/.config/vtally-electron/logs/main.log
+* **on macOS**: ~/Library/Logs/vtally-electron/main.log
+* **on Windows**: %USERPROFILE%\AppData\Roaming\vtally-electron\logs\main.log
